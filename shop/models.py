@@ -69,7 +69,7 @@ class Comment(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 
-class Attributes(models.Model):
+class AttributeKey(models.Model):
     key_name = models.CharField(max_length=125, null=True)
 
     def str(self):
@@ -85,5 +85,5 @@ class AttiributeValue(models.Model):
 
 class ProductAttribute(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    attiribute = models.ForeignKey('Attributes', on_delete=models.CASCADE)
+    attiribute_key = models.ForeignKey('AttributeKey', on_delete=models.CASCADE)
     attiribute_value = models.ForeignKey('AttiributeValue', on_delete=models.CASCADE)

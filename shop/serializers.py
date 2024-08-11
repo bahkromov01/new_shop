@@ -55,3 +55,4 @@ class CommentSerializer(serializers.ModelSerializer):
         if request and request.user:
             validated_data['user'] = request.user
         return super().create(validated_data)
+
