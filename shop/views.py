@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
 from shop.models import Category, Product, Group
-from shop.serializers import CategorySerializer, ProductSerializer, GroupSerializer
+from shop.serializers import CategorySerializer, ProductSerializer, GroupSerializer, ProductAttributeSerializer
 
 
 class CategoryListView(generics.ListAPIView):
@@ -115,3 +115,8 @@ class ProductListView(generics.ListCreateAPIView):
             queryset = queryset.filter(group__slug=group_slug)
 
         return queryset
+    
+class ProductAttributeView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductAttributeSerializer
+    lookup_field = 'slug'
