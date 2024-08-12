@@ -115,7 +115,8 @@ class ProductListView(generics.ListCreateAPIView):
             queryset = queryset.filter(group__slug=group_slug)
 
         return queryset
-    
+
+
 class ProductAttributeView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductAttributeSerializer
