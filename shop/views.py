@@ -11,13 +11,14 @@ from rest_framework.response import Response
 from rest_framework import generics, status
 from shop.models import Category, Product, Group
 from shop.serializers import CategorySerializer, ProductSerializer, GroupSerializer, ProductAttributeSerializer
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
 
 
 class CategoryDetail(generics.RetrieveAPIView):
@@ -50,6 +51,8 @@ class CategoryDetail(generics.RetrieveAPIView):
 class CreateCategoryView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
 
 class UpdateCategoryView(generics.UpdateAPIView):
@@ -108,6 +111,8 @@ class ProductListView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'slug'
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
 
     def get_queryset(self):
@@ -130,4 +135,6 @@ class ProductAttributeView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductAttributeSerializer
     lookup_field = 'slug'
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 

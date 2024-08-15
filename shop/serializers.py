@@ -87,32 +87,46 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "password"]
 
 
-class RegisterSerializer(serializers.ModelSerializer):
-    username = serializers.CharField()
-    first_name = serializers.CharField(required=False)
-    last_name = serializers.CharField(required=False)
-    email = serializers.EmailField()
-    password = serializers.CharField(write_only=True)
-    password2 = serializers.CharField(write_only=True)
+# class RegisterSerializer(serializers.ModelSerializer):
+#     username = serializers.CharField()
+#     first_name = serializers.CharField(required=False)
+#     last_name = serializers.CharField(required=False)
+#     email = serializers.EmailField()
+#     password = serializers.CharField(write_only=True)
+#     password2 = serializers.CharField(write_only=True)
+#
+#     class Meta:
+#         model = User
+#         fields = ["id", "username", "first_name", "last_name", "email", "password", "password2"]
+#
+#     def validate_username(self, username):
+#         if User.objects.filter(username=username).exists():
+#             raise ValidationError({"detail": "User already exists!"})
+#         return username
+#
+#     def validate(self, data):
+#         if data['password'] != data['password2']:
+#             raise ValidationError({"message": "Both passwords must match!"})
+#         if User.objects.filter(email=data['email']).exists():
+#             raise ValidationError({"message": "Email already taken!"})
+#
+#         return data
+#
+#     def create(self, validated_data):
+#         validated_data.pop('password2')
+#         user = User.objects.create_user(**validated_data)
+#         return user
 
+
+class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "first_name", "last_name", "email", "password", "password2"]
-
-    def validate_username(self, username):
-        if User.objects.filter(username=username).exists():
-            raise ValidationError({"detail": "User already exists!"})
-        return username
-
-    def validate(self, data):
-        if data['password'] != data['password2']:
-            raise ValidationError({"message": "Both passwords must match!"})
-        if User.objects.filter(email=data['email']).exists():
-            raise ValidationError({"message": "Email already taken!"})
-
-        return data
+        fields = ['username', 'password', 'email']
 
     def create(self, validated_data):
-        validated_data.pop('password2')
-        user = User.objects.create_user(**validated_data)
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
         return user

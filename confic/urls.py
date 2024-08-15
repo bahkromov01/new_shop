@@ -19,12 +19,21 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.authtoken import views
 from confic.customerAuth import CustomAuthToken
-from confic import  settings
+from confic import settings
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+from rest_framework_simplejwt.views import TokenBlacklistView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('shop/', include('shop.urls')),
     path('api-auth/', include('rest_framework.urls')),
-    path('api-token-auth/', CustomAuthToken.as_view())
+    path('api-token-auth/', CustomAuthToken.as_view()),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

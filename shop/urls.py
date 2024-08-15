@@ -1,6 +1,7 @@
 from . import views
 from django.urls import path
 from shop.auth.views import LoginAPIView, LogoutAPIView, RegisterAPIView
+from confic.custom_obtain_views import RegisterView, LoginView, LogoutView
 
 urlpatterns = [
     path('category/', views.CategoryListView.as_view()),
@@ -17,6 +18,11 @@ urlpatterns = [
     # Auth
     path('login/', LoginAPIView.as_view()),
     path('logout/', LogoutAPIView.as_view()),
-    path('register/', RegisterAPIView.as_view())
+    path('register/', RegisterAPIView.as_view()),
+
+    # JWT
+    path('register-page/', RegisterView.as_view(), name='register'),
+    path('login-page/', LoginView.as_view(), name='login'),
+    path('logout-page/', LogoutView.as_view(), name='logout'),
 
 ]
