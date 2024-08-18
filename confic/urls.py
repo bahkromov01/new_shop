@@ -25,11 +25,8 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework_simplejwt.views import TokenBlacklistView
-from shop.views import UserViewSet
 from rest_framework.routers import DefaultRouter
 
-router = DefaultRouter()
-router.register(r'users', UserViewSet, basename='user')
 
 
 urlpatterns = [
