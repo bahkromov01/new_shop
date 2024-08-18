@@ -25,11 +25,17 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from rest_framework_simplejwt.views import TokenBlacklistView
+from shop.views import UserViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('shop/', include('shop.urls')),
+    path('post/', include('post.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('api-token-auth/', CustomAuthToken.as_view()),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),

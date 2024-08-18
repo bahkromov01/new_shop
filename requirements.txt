@@ -1,3 +1,4 @@
+jazzmin==3.0.0
 asgiref==3.8.1
 Django==5.0.7
 django-filter==24.3

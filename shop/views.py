@@ -1,29 +1,25 @@
 # Create your views here.
 from urllib import request
-
-from django.contrib.auth.models import User
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
 from shop.models import Category, Product, Group
 from shop.serializers import CategorySerializer, ProductSerializer, GroupSerializer, ProductAttributeSerializer
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from shop import permissions
 
 
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
 
 class CategoryDetail(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
 
     def retrieve(self, request, *args, **kwargs):
         slug = self.kwargs['slug']
@@ -38,7 +34,6 @@ class CategoryDetail(generics.RetrieveAPIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
@@ -51,13 +46,13 @@ class CategoryDetail(generics.RetrieveAPIView):
 class CreateCategoryView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
 
 
 class UpdateCategoryView(generics.UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
 
     def get(self, request, *args, **kwargs):
         slug = self.kwargs['slug']
@@ -78,6 +73,7 @@ class UpdateCategoryView(generics.UpdateAPIView):
 class DeleteCategoryView(generics.DestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
     lookup_field = 'slug'
 
     def get(self, request, *args, **kwargs):
@@ -94,11 +90,15 @@ class DeleteCategoryView(generics.DestroyAPIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# class ProductDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     lookup_field = 'slug'
+
+
 class GroupListView(generics.ListAPIView):
     serializer_class = GroupSerializer
     lookup_field = 'slug'
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
 
     def get_queryset(self):
         category_slug = self.kwargs.get('slug')
@@ -111,9 +111,8 @@ class ProductListView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'slug'
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsOwnerIsAuthenticated]
     authentication_classes = [JWTAuthentication]
-
 
     def get_queryset(self):
         category_slug = self.kwargs.get('category_slug')
@@ -135,6 +134,3 @@ class ProductAttributeView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductAttributeSerializer
     lookup_field = 'slug'
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
-
