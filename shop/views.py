@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics, status
-from shop.models import Category, Product, Group
+from shop.models import Category, Product, Group, ProductAttribute
 from shop.serializers import CategorySerializer, ProductSerializer, GroupSerializer, ProductAttributeSerializer
 from shop import permissions
 
@@ -16,14 +16,13 @@ class CategoryListView(generics.ListAPIView):
     serializer_class = CategorySerializer
 
     def get_queryset(self):
-        queryset = Category.objects.select_related('title')
+        queryset = Category.objects.select_related('title').all()
         return queryset
 
 
 class CategoryDetail(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
 
     def retrieve(self, request, *args, **kwargs):
         slug = self.kwargs['slug']
@@ -50,7 +49,6 @@ class CategoryDetail(generics.RetrieveAPIView):
 class CreateCategoryView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-
 
 
 class UpdateCategoryView(generics.UpdateAPIView):
@@ -143,3 +141,7 @@ class ProductAttributeView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductAttributeSerializer
     lookup_field = 'slug'
+
+    def get_queryset(self):
+        queryset = ProductAttribute.objects.select_related('attiribute_key').prefetch_related('attiribute_value')
+        return queryset
