@@ -21,6 +21,11 @@ class Group(models.Model):
     category_id = models.ForeignKey(Category, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='images/')
 
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Group, self).save(*args, **kwargs)
+        return self.slug
+
     def __str__(self):
         return self.name
 

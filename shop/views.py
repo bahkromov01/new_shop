@@ -15,11 +15,15 @@ class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def get_queryset(self):
+        queryset = Category.objects.select_related('title')
+        return queryset
+
 
 class CategoryDetail(generics.RetrieveAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
+
 
     def retrieve(self, request, *args, **kwargs):
         slug = self.kwargs['slug']
@@ -46,13 +50,12 @@ class CategoryDetail(generics.RetrieveAPIView):
 class CreateCategoryView(generics.CreateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
+
 
 
 class UpdateCategoryView(generics.UpdateAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
 
     def get(self, request, *args, **kwargs):
         slug = self.kwargs['slug']
@@ -73,7 +76,7 @@ class UpdateCategoryView(generics.UpdateAPIView):
 class DeleteCategoryView(generics.DestroyAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (permissions.IsSuperAdminOrReadOnly,)
+    authentication_classes = ()
     lookup_field = 'slug'
 
     def get(self, request, *args, **kwargs):
@@ -101,6 +104,10 @@ class GroupListView(generics.ListAPIView):
     lookup_field = 'slug'
 
     def get_queryset(self):
+        queryset = Group.objects.select_related('products').prefetch_related('slug')
+        return queryset
+
+    def get_save(self):
         category_slug = self.kwargs.get('slug')
         if category_slug:
             return Group.objects.filter(category__slug=category_slug)
@@ -111,10 +118,12 @@ class ProductListView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'slug'
-    permission_classes = [permissions.IsOwnerIsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
     def get_queryset(self):
+        queryset = Product.objects.select_related('group').prefetch_related('slug')
+        return queryset
+
+    def get_save(self):
         category_slug = self.kwargs.get('category_slug')
         group_slug = self.kwargs.get('group_slug')
 
