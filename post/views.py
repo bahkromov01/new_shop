@@ -1,6 +1,8 @@
-from django.shortcuts import render
+from django.core.cache import cache
+from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.generics import ListCreateAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -73,3 +75,18 @@ class DetailPostApiView(APIView):
 
     def delete(self, request, format=None):
         pass
+
+
+class PostDetailApiView(APIView):
+    def get(self, request, *args, **kwargs):
+        post_id = kwargs.get('product_id')
+        cache_key = f'post-detail_{post_id}'
+
+        post_data = cache.get(cache_key)
+        if post_data is None:
+            post = get_object_or_404(Post, pk=post_id)
+            cache.set(cache_key, post, 60 * 15)
+            return Response(request, status=status.HTTP_200_OK)
+        else:
+            return Response(post_data, status=status.HTTP_400_BAD_REQUEST)
+

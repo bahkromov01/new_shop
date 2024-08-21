@@ -1,5 +1,8 @@
 # Create your views here.
 from urllib import request
+
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -15,9 +18,15 @@ class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-    def get_queryset(self):
-        queryset = Category.objects.select_related('title').all()
-        return queryset
+    @method_decorator(cache_page(60))
+    def get(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
+
+    # def get_queryset(self):
+    #     queryset = Category.objects.select_related('title').all()
+    #     return queryset
+
 
 
 class CategoryDetail(generics.RetrieveAPIView):
