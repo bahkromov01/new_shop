@@ -1,0 +1,47 @@
+<<<-- Massivlar (Arrays) --->
+
+Kiritish (Insert) ==>	O(n)	"Elementni massivning o'rtasiga yoki boshiga qo'shish, boshqa elementlarni siljitishni talab qiladi"
+
+
+Oxiriga qo'shish (Append) ===>	O(1)	"Elementni massivning oxiriga qo'shish"
+
+O'chirish (Delete) === > O(n)	"Elementni o'chirish va boshqa elementlarni siljitish"
+
+Indeks orqali o'qish (Access) ===> O(1)	 "Berilgan indeksdagi elementga to'g'ridan-to'g'ri kirish"
+
+<<<<---- Bağlar (Linked Lists) --->
+
+Kiritish (Insert) ===>	O(1)	Boshlanishida yoki oxirida kiritish. "Oxirida kiritish uchun ko'p hollarda boshdan oxirigacha o'tish talab qilinadi, lekin boshlanishida kiritish O(1) bo'ladi"
+
+Qidirish (Search) ===> O(n) ---->	"Kerakli elementni topish uchun barcha elementlarni tekshirish kerak"
+
+O'chirish (Delete) ===>	O(1)	"O'chiriladigan element manzili ma'lum bo'lsa"
+
+O'qish (Access) ===> O(n)	"Ma'lum indeksdagi elementga kirish uchun barcha tugunlardan o'tish kerak"
+
+
+<<<-- Stack (To'plam) --->>
+
+Kiritish (Push) ==> 	O(1)	"Stack'ning yuqori qismiga kiritish"
+
+O'chirish (Pop) ===> O(1)	"Stack'ning yuqori qismidan o'chirish"
+
+O'qish (Top/Peek) ===>	O(1)	"Stack'ning yuqori qismidagi elementni o'qish"
+
+<<<-- Queue (Navbat) -->>
+
+Kiritish (Insert) ===>	O(1)	"Kalit qiymat juftligini qo'shish"
+
+Qidirish (Search) ===>	O(1)	"Kalit asosida qiymatni topish"
+
+O'chirish (Delete) ===>	O(1)	"Kalit qiymat juftligini o'chirish"
+
+<<<-- Binary Search Tree (BST) ---->>>
+
+Kiritish (Insert) ===>	O(log n)	"Balanslangan daraxt uchun"
+
+Qidirish (Search) ===>	O(log n)	"Balanslangan daraxt uchun"
+
+O'chirish (Delete) ===>	O(log n)	"Balanslangan daraxt uchun"
+
+Eng kichik yoki katta elementni topish ===>	O(log n)	"Balanslangan daraxt uchun"

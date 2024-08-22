@@ -54,7 +54,7 @@ class PostModelViewSet(APIView):
 
 
 class DetailPostApiView(APIView):
-    def get(self, request,pk, format=None):
+    def get(self, request, pk, format=None):
         posts = Post.objects.get(id=pk)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
@@ -85,8 +85,9 @@ class PostDetailApiView(APIView):
         post_data = cache.get(cache_key)
         if post_data is None:
             post = get_object_or_404(Post, pk=post_id)
-            cache.set(cache_key, post, 60 * 15)
-            return Response(request, status=status.HTTP_200_OK)
+            serializer = PostSerializer(post, many=False)
+            cache.set(cache_key, serializer.data, timeout=60 * 15)
+            return Response(serializer.data)
         else:
             return Response(post_data, status=status.HTTP_400_BAD_REQUEST)
 
